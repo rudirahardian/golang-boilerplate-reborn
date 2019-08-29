@@ -7,6 +7,7 @@ import (
 	"net/http"
 	services "example_app/service"
 	httpEntity "example_app/entity/http"
+	"fmt"
 )
 
 type UserController struct {
@@ -72,3 +73,47 @@ func (service *UserController) UpdateUsersByID(context *gin.Context) {
 		"id": id,
 	})
 } 
+
+// delete user by id
+func (service *UserController) DeleteUserByID(context *gin.Context) {
+	id, err := strconv.Atoi(context.Param("id"))
+	if nil != err {
+		context.JSON(http.StatusBadRequest, gin.H{
+			"message": "Bad Request",
+		})
+	}
+	payload := httpEntity.UserRequest{}
+	if err := context.ShouldBind(&payload); err != nil {
+		context.JSON(http.StatusBadRequest, gin.H{
+			"message": "Bad Request",
+		})
+		return
+	}
+	status := service.UserService.DeleteUserByID(id)
+
+	if status == true {
+		context.JSON(http.StatusOK, gin.H{
+			"message": "deleted",
+			"id": id,
+		})
+		return
+	}
+	context.JSON(http.StatusOK, gin.H{
+		"message": "row already deleted",
+		"id": id,
+	})
+	
+} 
+
+func (service *UserController) CreateUser(context *gin.Context) {
+	payload := httpEntity.UserRequestNew{}
+	if err := context.ShouldBind(&payload); err != nil {
+		context.JSON(http.StatusBadRequest, gin.H{
+			"message": "Bad Request",
+		})
+		return
+	}
+	result := service.UserService.CreateUser(payload)
+	fmt.Println("Ada: ", payload)
+	context.JSON(http.StatusOK, result)
+}

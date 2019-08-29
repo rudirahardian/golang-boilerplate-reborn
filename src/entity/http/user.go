@@ -8,6 +8,13 @@ type UserRequest struct {
 	Address 		string     	`json:"address"`
 }
 
+type UserRequestNew struct {
+	Name 			string     	`json:"name"`
+	IDCardNumber 	string     	`json:"id_card_number"`
+	Address 		string     	`json:"address"`
+	UserStatusID	uint		`json:"user_status_id"`
+}
+
 type UserDetailResponse struct {
 	ID 				uint       	`json:"id"`
 	Name 			string     	`json:"name"`
