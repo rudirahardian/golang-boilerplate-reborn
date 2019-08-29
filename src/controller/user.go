@@ -65,6 +65,10 @@ func (service *UserController) UpdateUsersByID(context *gin.Context) {
 		})
 		return
 	}
-	service.UserService.UpdateUserByID(id,payload)
-	context.JSON(http.StatusNoContent, gin.H{})
+	status := service.UserService.UpdateUserByID(id,payload)
+	context.JSON(http.StatusOK, gin.H{
+		"playload": payload,
+		"status": status,
+		"id": id,
+	})
 } 
