@@ -19,6 +19,8 @@ atau
 migrate -verbose -source file://path/relative_path -database dbdriver:'//host:port/database_name' up
 atau
 migrate -verbose -source file://path/relative_path -database dbdriver:'//tcp(host:port)/database_name' up
+atau
+migrate -verbose -source file://migration/mysql/ -database mysql:'//root:gotest@tcp(172.22.0.3:3306)/local_gotest' up
 ```
 * contoh untuk membuat file migration
 ```bash
