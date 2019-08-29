@@ -67,9 +67,14 @@ func (service *UserController) UpdateUsersByID(context *gin.Context) {
 		return
 	}
 	status := service.UserService.UpdateUserByID(id,payload)
+	if nil != status {
+		context.JSON(http.StatusOK, gin.H{
+			"message error": status,
+		})
+		return
+	}
 	context.JSON(http.StatusOK, gin.H{
 		"playload": payload,
-		"status": status,
 		"id": id,
 	})
 } 
@@ -113,7 +118,15 @@ func (service *UserController) CreateUser(context *gin.Context) {
 		})
 		return
 	}
-	result := service.UserService.CreateUser(payload)
+	result, err:= service.UserService.CreateUser(payload)
 	fmt.Println("Ada: ", payload)
-	context.JSON(http.StatusOK, result)
+	if nil != err {
+		context.JSON(http.StatusOK, gin.H{
+			"error": err,
+		})
+		return
+	}
+	context.JSON(http.StatusOK, gin.H{
+		"result": result,
+	})
 }

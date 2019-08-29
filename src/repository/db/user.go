@@ -6,7 +6,6 @@ import (
 	dbEntity "example_app/entity/db"
 	"sync"
 	"errors"
-	"fmt"
 )
 
 type UserRepository struct {
@@ -42,7 +41,7 @@ func (repository *UserRepository) UpdateUserByID(id int, userData *dbEntity.User
 	query = query.Updates(userData)
 	query.Scan(&userData)
 	if count == 0{
-		query.Error = errors.New("error brook")
+		query.Error = errors.New("id not found")
 	}
 	
 	return query.Error
@@ -53,7 +52,6 @@ func (repository *UserRepository) GetUsersList(limit int, offset int) ([]dbEntit
 	// user := &dbEntity.User{}
 	query := repository.DB.Table("users")
 	query = query.Find(&users)
-	fmt.Println("Data: ", users)
 	return users, query.Error
 }
 
@@ -78,7 +76,5 @@ func (repository *UserRepository) CreateUser(userData *dbEntity.User) ([]dbEntit
 	// user := &dbEntity.User{}
 	query := repository.DB.Table("users")
 	query = query.Create(&userData)
-	fmt.Println("Data: ", userData)
-	fmt.Println("Error: ", query.Error)
 	return users, query.Error
 }
