@@ -30,6 +30,39 @@ func (service *UserServiceMock) GetUserByID(id int, wg *sync.WaitGroup) *httpEnt
 	}
 }
 
+func (service *UserServiceMock) DeleteUserByID(id int) bool {
+	
+	return true
+}
+
+func (service *UserServiceMock) CreateUser(payload httpEntity.UserRequestNew) ([]httpEntity.UserResponse, error){
+	users := []httpEntity.UserResponse{}
+	const (
+	    ID1 = iota + 1
+	    ID2
+	    ID3
+	)
+	users = append(users, httpEntity.UserResponse{
+		ID: uint(ID1),
+		Name: "Test Name Mock",
+		IDCardNumber: "IDCARDTEST12345",
+		Address: "Address Test Street",
+	})
+	users = append(users, httpEntity.UserResponse{
+		ID: uint(ID2),
+		Name: "Test Name Mock",
+		IDCardNumber: "IDCARDTEST12345",
+		Address: "Address Test Street",
+	})
+	users = append(users, httpEntity.UserResponse{
+		ID: uint(ID3),
+		Name: "Test Name Mock",
+		IDCardNumber: "IDCARDTEST12345",
+		Address: "Address Test Street",
+	})
+	return users,nil
+}
+
 func (service *UserServiceMock) GetAllUser(page int,count int) []httpEntity.UserResponse{
 	users := []httpEntity.UserResponse{}
 	const (
@@ -58,8 +91,8 @@ func (service *UserServiceMock) GetAllUser(page int,count int) []httpEntity.User
 	return users
 }
 
-func (service *UserServiceMock) UpdateUserByID(id int, payload httpEntity.UserRequest) bool{
-	return true
+func (service *UserServiceMock) UpdateUserByID(id int, payload httpEntity.UserRequest) error{
+	return nil
 }
 
 func TestUserGetByIDMock(t *testing.T) {
@@ -67,7 +100,7 @@ func TestUserGetByIDMock(t *testing.T) {
 	assert := assert.New(t)
 	c, r, resp := LoadRouterTestMock()
 
-	var idTest uint = 1
+	var idTest uint = 19
 	url := "/v1/users/" + fmt.Sprint(idTest)
 	c.Request, _ = http.NewRequest(http.MethodGet, url, nil)
 	r.ServeHTTP(resp, c.Request)
@@ -122,6 +155,5 @@ func TestUpdateUserByIDMock(t *testing.T) {
 	c.Request, _ = http.NewRequest(http.MethodPut, url, bytes.NewBufferString(string(jsonPayload)))
 	c.Request.Header.Add("Content-Type", "application/json")
 	r.ServeHTTP(resp, c.Request)
-
-	assert.Equal(http.StatusNoContent, resp.Code, "Status should be 204")
+	assert.Equal(http.StatusOK, resp.Code, "Status should be 204")
 }
